@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Blog | {% block title %}{% endblock title %}</title>
+  {% load static %}
+  <link rel="icon" href="{% static 'core/blog.png' %}" />
   <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.3/css/bulma.min.css" />
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link rel="stylesheet" href="../css/bulma-divider.min.css">
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
@@ -27,7 +27,6 @@
     <div class="container">
       <div class="navbar-brand">
         <a class="navbar-item" href="/">
-          {% load static %}
           <img src="{% static 'core/blog.png' %}" alt="Logo">
         </a>
         <span class="navbar-burger burger" data-target="navbarMenu">
