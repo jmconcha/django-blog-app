@@ -3,23 +3,40 @@
 {% block title %} Home {% endblock title %}
 
 {% block content %}
-  <section class="hero ">
-    <div class="hero-body">
-      <div class="container">
-        {% for blog in blogs %}
-          <section class="section">
+  {% for blog in blogs %}
+    <section class="section">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="content is-medium">
             <div class="columns">
-              <div class="column is-8 is-offset-2">
-                <div class="content is-medium">
-                  <h2 class="subtitle is-4">{{blog.created_at | date:"F d, Y"}}</h2>
-                  <h1 class="title"><a href="{% url 'blog:blog_detail' blog.slug %}">{{blog.title}}</a></h1>
-                  <p>{{blog.body}}</p>
-                </div>
+              <div class="column">
+                <figure class="image is-128x128 mx-0">
+                  <img
+                    class="is-rounded"
+                    src="https://bulma.io/images/placeholders/128x128.png"
+                  />
+                </figure>
+              </div>
+              <div
+                class="column is-full is-flex is-flex-direction-column is-justify-content-center"
+              >
+                <h1 class="title">
+                  <a href="{% url 'blog:blog_detail' blog.slug %}">{{ blog.title }}</a>
+                </h1>
+                <h2 class="subtitle is-5">{{ blog.created_at | date:"F d, Y" }}</h2>
+                <h2 class="subtitle is-5 mb-0 mt-1">James Harden</h2>
+                <h2 class="subtitle is-6 my-0">
+                  *Software Developer, *Basketball Player
+                </h2>
               </div>
             </div>
-          </section>
-        {% endfor %}
+
+            <p>{{ blog.body }}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <div class="is-divider"></div>
+  {% endfor %}
 {% endblock content %}
