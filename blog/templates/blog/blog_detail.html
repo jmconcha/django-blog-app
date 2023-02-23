@@ -3,154 +3,46 @@
 {% block title %} {{ blog.title }} {% endblock title %}
 
 {% block content %}
-  <section class="section">
-    <div class="content is-medium">
-      <div class="columns">
-        <div class="column">
-          <figure class="image is-128x128 mx-0">
-            <img
-              class="is-rounded"
-              src="https://bulma.io/images/placeholders/128x128.png"
-            />
-          </figure>
-        </div>
-        <div
-          class="column is-full is-flex is-flex-direction-column is-justify-content-center"
-        >
-          <h1 class="title">{{ blog.title }}</h1>
-          <h2 class="subtitle is-5">
-            <span class="mr-4">James Harden</span>
-            <span class="has-text-grey">{{ blog.created_at|date:"F d, Y" }}</span>
-          </h2>
-        </div>
-      </div>
-
-      <p>{{ blog.body }}</p>
-    </div>
-  </section>
-
-  <div class="is-divider"></div>
-
-  <section class="section">
-    {% with discussion_count=blog.rel_comments.count %}
-      <h2 class="title">Discussion{{ discussion_count|pluralize }} ({{ discussion_count }})</h2>
-    {% endwith %}
-    {% include './comment_form.html' with blog_slug=blog.slug form=comment_form %}
-  </section>
-
-  <section class="section">
-    {% for comment in blog.rel_comments.all %}
-      {% include './comment.html' with comment=comment%}
-    {% endfor %}
-  </section>
-
-  {% comment %} comment section  {% endcomment %}
-  {% comment %} <section class="section">
-    <article class="media">
-      <figure class="media-left">
-        <p class="image is-64x64">
-          <img src="https://bulma.io/images/placeholders/128x128.png" />
-        </p>
-      </figure>
-      <div class="media-content">
-        <div class="content">
-          <p>
-            <strong>Barbara Middleton</strong>
-            <br />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Duis porta eros lacus, nec ultricies elit blandit non.
-            Suspendisse pellentesque mauris sit amet dolor blandit
-            rutrum. Nunc in tempus turpis.
-            <br />
-            <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
-          </p>
-        </div>
-
-        <article class="media">
-          <figure class="media-left">
-            <p class="image is-48x48">
+  <div class="container">
+    <section class="section">
+      <div class="content is-medium">
+        <div class="columns">
+          <div class="column">
+            <figure class="image is-128x128 mx-0">
               <img
-                src="https://bulma.io/images/placeholders/96x96.png"
+                class="is-rounded"
+                src="https://bulma.io/images/placeholders/128x128.png"
               />
-            </p>
-          </figure>
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong>Sean Brown</strong>
-                <br />
-                Donec sollicitudin urna eget eros malesuada sagittis.
-                Pellentesque habitant morbi tristique senectus et netus
-                et malesuada fames ac turpis egestas. Aliquam blandit
-                nisl a nulla sagittis, a lobortis leo feugiat.
-                <br />
-                <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-              </p>
-            </div>
-
-            <article class="media">
-              Vivamus quis semper metus, non tincidunt dolor. Vivamus in
-              mi eu lorem cursus ullamcorper sit amet nec massa.
-            </article>
-
-            <article class="media">
-              Morbi vitae diam et purus tincidunt porttitor vel vitae
-              augue. Praesent malesuada metus sed pharetra euismod. Cras
-              tellus odio, tincidunt iaculis diam non, porta aliquet
-              tortor.
-            </article>
+            </figure>
           </div>
-        </article>
-
-        <article class="media">
-          <figure class="media-left">
-            <p class="image is-48x48">
-              <img
-                src="https://bulma.io/images/placeholders/96x96.png"
-              />
-            </p>
-          </figure>
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong>Kayli Eunice </strong>
-                <br />
-                Sed convallis scelerisque mauris, non pulvinar nunc
-                mattis vel. Maecenas varius felis sit amet magna
-                vestibulum euismod malesuada cursus libero. Vestibulum
-                ante ipsum primis in faucibus orci luctus et ultrices
-                posuere cubilia Curae; Phasellus lacinia non nisl id
-                feugiat.
-                <br />
-                <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-              </p>
-            </div>
+          <div
+            class="column is-full is-flex is-flex-direction-column is-justify-content-center"
+          >
+            <h1 class="title">{{ blog.title }}</h1>
+            <h2 class="subtitle is-5">
+              <span class="mr-4">James Harden</span>
+              <span class="has-text-grey">{{ blog.created_at|date:"F d, Y" }}</span>
+            </h2>
           </div>
-        </article>
-      </div>
-    </article>
+        </div>
 
-    <article class="media">
-      <figure class="media-left">
-        <p class="image is-64x64">
-          <img src="https://bulma.io/images/placeholders/128x128.png" />
-        </p>
-      </figure>
-      <div class="media-content">
-        <div class="field">
-          <p class="control">
-            <textarea
-              class="textarea"
-              placeholder="Add a comment..."
-            ></textarea>
-          </p>
-        </div>
-        <div class="field">
-          <p class="control">
-            <button class="button is-link">Post comment</button>
-          </p>
-        </div>
+        <p>{{ blog.body }}</p>
       </div>
-    </article>
-  </section> {% endcomment %}
+    </section>
+
+    <div class="is-divider"></div>
+
+    <section class="section">
+      {% with discussion_count=blog.rel_comments.count %}
+        <h2 class="title">Discussion{{ discussion_count|pluralize }} ({{ discussion_count }})</h2>
+      {% endwith %}
+      {% include './comment_form.html' with blog_slug=blog.slug form=comment_form %}
+    </section>
+
+    <section class="section">
+      {% for comment in blog.rel_comments.all %}
+        {% include './comment.html' with comment=comment%}
+      {% endfor %}
+    </section>
+  </div>
 {% endblock content %}
