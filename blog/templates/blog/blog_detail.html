@@ -35,17 +35,7 @@
     {% with discussion_count=blog.rel_comments.count %}
       <h2 class="title">Discussion{{ discussion_count|pluralize }} ({{ discussion_count }})</h2>
     {% endwith %}
-    <form action="">
-      <textarea
-        class="textarea"
-        placeholder="Write a comment..."
-      ></textarea>
-      <input
-        class="button is-link mt-3"
-        type="submit"
-        value="Post comment"
-      />
-    </form>
+    {% include './comment_form.html' with blog_slug=blog.slug form=comment_form %}
   </section>
 
   <section class="section">

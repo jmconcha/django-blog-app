@@ -1,0 +1,20 @@
+<form action="{% url 'blog:comment_on_blog' blog_slug %}" method="POST">
+  {% csrf_token %}
+  {% comment %} <textarea
+    class="textarea"
+    placeholder="Write a comment..."
+  ></textarea> {% endcomment %}
+  <div class="field">
+    <div class="control">{{ form.comment_text }}</div>
+    {% if form.comment_text.errors %}
+      <div class="is-danger">
+        {{ form.comment_text.errors }}
+      </div>
+    {% endif %}
+  </div>
+  <input
+    class="button is-link mt-3"
+    type="submit"
+    value="Post comment"
+  />
+</form>
