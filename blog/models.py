@@ -11,7 +11,7 @@ class Blog(models.Model):
         return self.title
     
 class Comment(models.Model):
-    blog = models.ForeignKey(Blog, related_name='rel_comment', on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, related_name='rel_comments', on_delete=models.CASCADE)
     slug = models.SlugField()
     comment_text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
