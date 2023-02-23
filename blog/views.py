@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 
 from .models import Blog
+from .forms import BlogForm
 
 # Create your views here.
 def blog_detail(request, slug):
@@ -8,4 +9,22 @@ def blog_detail(request, slug):
     
     return render(request, 'blog/blog_detail.html', {
         'blog': blog,
+    })
+    
+def create_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST)
+        if form.is_valid():
+            form.save()
+            
+            return redirect(reverse('core:front_page'))
+    else:
+        form = BlogForm()
+    
+    for formField in form:
+        if formField.errors:
+            formField.field.widget.attrs['class'] += ' is-danger'
+    
+    return render(request, 'blog/create_blog.html', {
+        'form': form,
     })
