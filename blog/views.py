@@ -23,7 +23,7 @@ def blog_detail(request, slug):
     
 def create_blog(request):
     if request.method == 'POST':
-        form = BlogForm(request['POST'])
+        form = BlogForm(request.POST)
         if form.is_valid():
             form.save()
             
