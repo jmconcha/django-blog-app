@@ -40,7 +40,7 @@
     </section>
 
     <section class="section">
-      {% for comment in blog.rel_comments.all %}
+      {% for comment in comments %}
         {% include './comment.html' with comment=comment%}
       {% endfor %}
     </section>

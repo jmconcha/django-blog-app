@@ -7,6 +7,7 @@ from .forms import BlogForm, CommentForm
 # Create your views here.
 def blog_detail(request, slug):
     blog = get_object_or_404(Blog, slug=slug)
+    comments = blog.rel_comments.order_by('-created_at')
     
     comment_form = CommentForm()
     comment_form.fields['comment_text'].widget.attrs['class'] = 'textarea'
@@ -18,6 +19,7 @@ def blog_detail(request, slug):
     
     return render(request, 'blog/blog_detail.html', {
         'blog': blog,
+        'comments': comments,
         'comment_form': comment_form
     })
     
