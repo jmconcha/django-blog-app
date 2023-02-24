@@ -5,7 +5,7 @@ from .models import Blog, Comment
 class BlogForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ('title', 'body')
+        fields = ('status', 'title', 'body')
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
