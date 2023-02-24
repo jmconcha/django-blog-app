@@ -35,17 +35,6 @@
         <a href="{{ create_blog_url }}" class="navbar-item {% if request.get_full_path == create_blog_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
           Create Blog
         </a>
-        {% if request.user.is_authenticated %}
-          {% url 'logout' as logout_url %}
-          <a href="{{ logout_url }}" class="navbar-item {% if request.get_full_path == logout_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
-            Logout
-          </a>
-        {% else %}
-          {% url 'login' as login_url %}
-          <a href="{{ login_url }}" class="navbar-item {% if request.get_full_path == login_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
-            Login
-          </a>
-        {% endif %}
       </div>
     </div>
   </div>
