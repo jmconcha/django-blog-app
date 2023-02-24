@@ -16,16 +16,19 @@
     <div id="navbarMenu" class="navbar-menu">
       <div class="navbar-end">
         <div class="navbar-item">
-          <div class="control has-icons-left">
-            <input
-              class="input is-rounded"
-              type="email"
-              placeholder="Search"
-            />
-            <span class="icon is-left">
-              <i class="fa fa-search"></i>
-            </span>
-          </div>
+          <form action="{% url 'blog:search_blog' %}" method="GET">
+            <div class="control has-icons-left">
+              <input
+                class="input is-rounded"
+                type="text"
+                name="query"
+                placeholder="Search"
+              />
+              <span class="icon is-left">
+                <i class="fa fa-search"></i>
+              </span>
+            </div>
+          </form>
         </div>
         {% url 'core:front_page' as font_page_url %}
         <a href="{{ font_page_url }}" class="navbar-item {% if request.get_full_path == font_page_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">

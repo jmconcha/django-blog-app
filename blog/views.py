@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
+from django.contrib import messages
+from django.db.models import Q
 
 from .models import Blog
 from .forms import BlogForm, CommentForm
@@ -60,3 +62,17 @@ def comment_on_blog(request, blog_slug):
         'blog': blog,
         'comment_form': CommentForm(),
     })
+    
+def search_blog(request):
+    query = request.GET.get('query', '')
+    blogs = Blog.objects.filter(Q(title__icontains=query) | Q(body__icontains=query))
+    
+    if blogs.count() == 0:
+        messages.add_message(request, messages.INFO, "There's no blog that match your query")
+        return redirect(reverse('core:front_page'))
+    
+    recent_to_oldest_blogs = blogs.order_by('-created_at')
+    return render(request, 'core/front_page.html', {
+        'blogs': recent_to_oldest_blogs,
+    })
+    

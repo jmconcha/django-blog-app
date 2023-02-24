@@ -4,6 +4,18 @@
 
 {% block content %}
   <div class="container">
+    {% if messages %}
+      <section class="section async-remove-message">
+        {% for message in messages %}
+          <article class="message is-{% if message.tags %}{{ message.tags }}{% endif %} ">
+            <div class="message-body">
+              <p>{{ message }}</p>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+    {% endif %}
+
     {% for blog in blogs %}
       <section class="section">
         <div class="columns">
@@ -49,4 +61,16 @@
       <h1 class="title">No blog posted yet. Be the first blogger, <a href="{% url 'blog:create_blog' %}">create blog now!</a></h1>
     {% endfor %}
   </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      const message = document.querySelector('.async-remove-message');
+
+      if (message !== null) {
+        setTimeout(function() {
+          message.style.display = 'none';
+        }, 3000);
+      }
+    })
+  </script>
 {% endblock content %}
