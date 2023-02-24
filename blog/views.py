@@ -6,6 +6,7 @@ from django.db.models import Q
 
 from .models import Blog
 from .forms import BlogForm, CommentForm
+from .utils import generate_slug, slugify
 
 # Create your views here.
 def blog_detail(request, slug):
@@ -32,6 +33,8 @@ def create_blog(request):
         form = BlogForm(request.POST)
         if form.is_valid():
             blog = form.save(commit=False)
+            title_random_slug = slugify(blog.title)[:20] + generate_slug(20)
+            blog.slug = title_random_slug
             blog.author = request.user
             blog.save()
             

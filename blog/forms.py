@@ -5,7 +5,7 @@ from .models import Blog, Comment
 class BlogForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ('slug', 'title', 'body')
+        fields = ('title', 'body')
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -13,7 +13,7 @@ class BlogForm(forms.ModelForm):
         for visible in self.visible_fields():
             if visible.name == 'body':
                 visible.field.widget.attrs['class'] = 'textarea'
-                visible.field.widget.attrs['rows'] = '3'
+                visible.field.widget.attrs['rows'] = '5'
             else:
                 visible.field.widget.attrs['class'] = 'input'
                 
