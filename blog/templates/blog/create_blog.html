@@ -9,7 +9,7 @@
       {% for field in form %}
         <div class="field mt-5">
           <label class="label" for="{{ field.auto_id }}">{{ field.label }}</label>
-          <div class="control">{{ field }}</div>
+          <div class="{% if field.name == 'status' %}select{% else %}control{% endif %}">{{ field }}</div>
         </div>
         {% if field.errors %}
           <div class="help is-danger">{{ field.errors }}</div>
