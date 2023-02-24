@@ -30,25 +30,42 @@
 
       <div class="columns">
         <div class="column is-8 is-offset-2">
-          <form action="{% url 'core:login' %}" method="POST">
-            {% csrf_token %}
-            <div class="field">
-              <label class="label" for="username">Username</label>
-              <div class="control">
-                <input class="input" type="text" name="username" id="username" required>
+          <div class="card">
+            <div class="card-content">
+              <form action="{% url 'core:login' %}" method="POST">
+                {% csrf_token %}
+                <div class="field mb-5">
+                  <label class="label" for="username">Username</label>
+                  <div class="control">
+                    <input class="input" type="text" name="username" id="username" required>
+                  </div>
+                </div>
+                <div class="field mb-5">
+                  <label class="label" for="password">Password</label>
+                  <div class="control">
+                    <input class="input" type="password" name="password" id="password" required>
+                  </div>
+                </div>
+                <input class="button is-fullwidth is-responsive is-link has-text-weight-bold" type="submit" value="Login">
+                {% if next %}
+                  <input type="hidden" name="next" value={{ next }}>
+                {% endif %}
+              </form>
+              
+              <div class="container is-flex is-flex-direction-column mt-3">
+                <small class="has-text-centered">
+                  <a href="">Forgot password?</a>
+                </small>
+
+                <div class="is-divider"></div>
+                <div class="columns">
+                  <div class="column is-8 is-offset-2">
+                    <a href="#" class="button is-fullwidth is-responsive is-success has-text-weight-bold">Register</a>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="field">
-              <label class="label" for="password">Password</label>
-              <div class="control">
-                <input class="input" type="password" name="password" id="password" required>
-              </div>
-            </div>
-            <input class="button is-fullwidth is-responsive is-link" type="submit" value="Login">
-            {% if next %}
-              <input type="hidden" name="next" value={{ next }}>
-            {% endif %}
-          </form>
+          </div>
         </div>
       </div>
     </section>
