@@ -13,7 +13,21 @@
               </div>
           </article>
         {% endfor %}
+      {% elif next %}
+        <article class="message is-warning">
+          <div class="message-body">
+            <p>
+              {% if request.user.is_authenticated %}
+                You are login but not allowed to access this.
+              {% else %}
+                You need to login.
+              {% endif %}
+            </p>
+          </div>
+        </article>
+          
       {% endif %}
+
       <div class="columns">
         <div class="column is-8 is-offset-2">
           <form action="{% url 'core:login' %}" method="POST">
@@ -31,6 +45,9 @@
               </div>
             </div>
             <input class="button is-fullwidth is-responsive is-link" type="submit" value="Login">
+            {% if next %}
+              <input type="hidden" name="next" value={{ next }}>
+            {% endif %}
           </form>
         </div>
       </div>

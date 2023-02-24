@@ -15,17 +15,23 @@ def front_page(request):
     
 def login_user(request):
     if request.method == 'POST':
+        next = request.POST.get('next')
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         
-        if user == None:
-            messages.add_message(request, messages.WARNING, "Your username and password didn't match. Please try again.")
-        else:
+        if user:
             login(request, user)
-            return redirect(reverse('core:front_page'))
+            next_url = next if next else reverse('core:front_page')
+            return redirect(next_url)
+        else:
+            messages.add_message(request, messages.WARNING, "Your username and password didn't match. Please try again.")
+    else:
+        next = request.GET.get('next')
         
-    return render(request, 'core/login.html')
+    return render(request, 'core/login.html', {
+        'next': next,
+    })
 
 def logout_user(request):
     if request.user.is_authenticated:
