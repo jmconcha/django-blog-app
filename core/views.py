@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib import messages
 
 from blog.models import Blog
@@ -38,3 +39,33 @@ def logout_user(request):
         logout(request)
     
     return redirect(reverse('core:front_page'))
+
+def register_user(request):
+    errors = {}
+    
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST.get('email', '')
+        password = request.POST['password']
+        confirm_password = request.POST['confirm-password']
+        
+        # checks if username is available
+        try:
+            User.objects.get(username=username)
+            errors['username'] = 'Username is not available'
+        except User.DoesNotExist:
+            pass
+        
+        # validate input
+        if password != confirm_password:
+            errors['password'] = 'Password must match'
+        
+        if not errors:
+            user = User.objects.create_user(username, email, password)
+            login(request, user)
+            
+            return redirect(reverse('core:front_page'))
+            
+    return render(request, 'core/register.html', {
+        'errors': errors,
+    })

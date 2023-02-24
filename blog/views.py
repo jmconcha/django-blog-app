@@ -29,7 +29,9 @@ def create_blog(request):
     if request.method == 'POST':
         form = BlogForm(request.POST)
         if form.is_valid():
-            form.save()
+            blog = form.save(commit=False)
+            blog.author = request.user
+            blog.save()
             
             return redirect(reverse('core:front_page'))
     else:

@@ -45,6 +45,10 @@
           <a href="{{ login_url }}" class="navbar-item {% if request.get_full_path == login_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
             Login
           </a>
+          {% url 'core:register' as register_url %}
+          <a href="{{ register_url }}" class="navbar-item {% if request.get_full_path == register_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+            Sign up
+          </a>
         {% endif %}
       </div>
     </div>

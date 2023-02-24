@@ -1,0 +1,75 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Sign up {% endblock title %}
+
+{% block content %}
+  <div class="container mt-6 mb-auto">
+    <section class="section">
+      {% if messages %}
+        {% for message in messages %}
+          <article class="message is-{% if message.tags %}{{ message.tags }}{% endif %}">
+            <div class="message-body">
+                <p>{{ message }}</p>
+              </div>
+          </article>
+        {% endfor %}
+      {% endif %}
+
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="card">
+            <div class="card-content">
+              <form action="{% url 'core:register' %}" method="POST">
+                {% csrf_token %}
+                <div class="field mb-5">
+                  <label class="label" for="username">Username</label>
+                  <div class="control">
+                    <input class="input {% if errors.username %}is-danger{% endif %}" type="text" name="username" id="username" required autofocus>
+                  </div>
+                  <p class="help is-danger">{{ errors.username }}</p>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="email">Email</label>
+                  <div class="control has-icons-left has-icons-right">
+                    <input class="input" id="email" name="email" type="email" placeholder="hello@email.com">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-envelope"></i>
+                    </span>
+                  </div>
+                </div>
+                
+                <div class="field mb-5">
+                  <label class="label" for="password">Password</label>
+                  <div class="control">
+                    <input class="input {% if errors.password %}is-danger{% endif %}" type="password" name="password" id="password" required>
+                  </div>
+                  <p class="help is-danger">{{ errors.password }}</p>
+                </div>
+
+                <div class="field mb-5">
+                  <label class="label" for="confirm-password">Confirm Password</label>
+                  <div class="control">
+                    <input class="input {% if errors.password %}is-danger{% endif %}" type="password" name="confirm-password" id="confirm-password" required>
+                  </div>
+                  <p class="help is-danger">{{ errors.password }}</p>
+                </div>
+
+                <input class="button is-fullwidth is-responsive is-link has-text-weight-bold" type="submit" value="Sign up">
+                {% if next %}
+                  <input type="hidden" name="next" value={{ next }}>
+                {% endif %}
+              </form>
+              
+              <div class="container is-flex is-flex-direction-column mt-3">
+                <small class="has-text-centered">
+                  <a href="{% url 'core:login' %}">Already have an account?</a>
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock content %}
