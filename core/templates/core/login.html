@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+  <div class="container mt-6 mb-auto">
+    <section class="section">
+      {% if messages %}
+        {% for message in messages %}
+          <article class="message is-{% if message.tags %}{{ message.tags }}{% endif %}">
+            <div class="message-body">
+                <p>{{ message }}</p>
+              </div>
+          </article>
+        {% endfor %}
+      {% endif %}
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <form action="{% url 'core:login' %}" method="POST">
+            {% csrf_token %}
+            <div class="field">
+              <label class="label" for="username">Username</label>
+              <div class="control">
+                <input class="input" type="text" name="username" id="username" required>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="password">Password</label>
+              <div class="control">
+                <input class="input" type="password" name="password" id="password" required>
+              </div>
+            </div>
+            <input class="button is-fullwidth is-responsive is-link" type="submit" value="Login">
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock content %}
