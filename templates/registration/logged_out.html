@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Logged out {% endblock title %}
+
+{% block content %}
+  <div class="container mt-6 mb-auto">
+    <section class="section">
+      <article class="message is-info">
+        <div class="message-body">
+          <h2 class="is-size-5">You are logged out.</h2>
+          <h1 class="title">Login again <a class="has-text-link" href="{% url 'login' %}">here</a></h1>
+        </div>
+      </article>
+    </section>
+  </div>
+{% endblock content %}

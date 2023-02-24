@@ -1,5 +1,5 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from .models import Blog
 from .forms import BlogForm, CommentForm
@@ -23,6 +23,7 @@ def blog_detail(request, slug):
         'comment_form': comment_form
     })
     
+@login_required    
 def create_blog(request):
     if request.method == 'POST':
         form = BlogForm(request.POST)
