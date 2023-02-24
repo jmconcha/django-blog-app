@@ -36,14 +36,20 @@
                 {% csrf_token %}
                 <div class="field mb-5">
                   <label class="label" for="username">Username</label>
-                  <div class="control">
+                  <div class="control has-icons-left">
                     <input class="input" type="text" name="username" id="username" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
                   </div>
                 </div>
                 <div class="field mb-5">
                   <label class="label" for="password">Password</label>
-                  <div class="control">
+                  <div class="control has-icons-left">
                     <input class="input" type="password" name="password" id="password" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
                   </div>
                 </div>
                 <input class="button is-fullwidth is-responsive is-link has-text-weight-bold" type="submit" value="Login">

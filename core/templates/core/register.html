@@ -23,8 +23,11 @@
                 {% csrf_token %}
                 <div class="field mb-5">
                   <label class="label" for="username">Username</label>
-                  <div class="control">
+                  <div class="control has-icons-left">
                     <input class="input {% if errors.username %}is-danger{% endif %}" type="text" name="username" id="username" required autofocus>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
                   </div>
                   <p class="help is-danger">{{ errors.username }}</p>
                 </div>
@@ -41,16 +44,22 @@
                 
                 <div class="field mb-5">
                   <label class="label" for="password">Password</label>
-                  <div class="control">
+                  <div class="control has-icons-left">
                     <input class="input {% if errors.password %}is-danger{% endif %}" type="password" name="password" id="password" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
                   </div>
                   <p class="help is-danger">{{ errors.password }}</p>
                 </div>
 
                 <div class="field mb-5">
                   <label class="label" for="confirm-password">Confirm Password</label>
-                  <div class="control">
+                  <div class="control has-icons-left">
                     <input class="input {% if errors.password %}is-danger{% endif %}" type="password" name="confirm-password" id="confirm-password" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
                   </div>
                   <p class="help is-danger">{{ errors.password }}</p>
                 </div>
