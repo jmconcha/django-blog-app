@@ -137,7 +137,7 @@ class RegisterUserViewTests(TestCase):
         self.assertContains(redirect_response, 'You are now successfully registered')
         
         
-class LoginViewTest(TestCase):
+class LoginUserViewTests(TestCase):
     def test_login_with_empty_inputs(self):
         response = self.client.post(reverse('core:login'), {
             'username': '',
@@ -174,3 +174,21 @@ class LoginViewTest(TestCase):
         redirect_response = self.client.get(reverse('core:front_page'))
         self.assertContains(redirect_response, text='Logout', html=True)
         
+        
+class LogoutUserViewTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+    
+    def test_logout_view(self):
+        User.objects.create_user(username='testuser', password='testpass123')
+        
+        # login user
+        is_logged_in = self.client.login(username='testuser', password='testpass123')
+        self.assertEqual(is_logged_in, True)
+        after_login_response = self.client.get(reverse('core:front_page'))
+        self.assertContains(after_login_response, 'Logout')
+
+        # logout user        
+        self.client.logout()
+        after_logout_response = self.client.get(reverse('core:front_page'))
+        self.assertContains(after_logout_response, 'Login')
