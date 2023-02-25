@@ -84,3 +84,93 @@ class NavbarTemplateTests(TestCase):
         self.assertNotContains(response, 'Login')
         self.assertNotContains(response, 'Sign up')
         self.assertContains(response, 'Logout')
+        
+        
+class RegisterUserViewTests(TestCase):
+    def test_register_with_empty_inputs(self):
+        response = self.client.post(reverse('core:register'), {
+            'username': '',
+            'email': '',
+            'password': '',
+            'confirm-password': '',
+        })
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['errors'], {
+            'username': 'Username is required',
+            'password': 'Password is required',
+            'confirm_password': 'Confirm password is required',
+        })
+        self.assertContains(response, 'Username is required')
+        self.assertContains(response, 'Password is required')
+        self.assertContains(response, 'Confirm password is required')
+        
+    def test_register_with_mismatch_password(self):
+        response = self.client.post(reverse('core:register'), {
+            'username': 'testuser',
+            'password': 'pass123',
+            'confirm-password': '123pass',
+        })
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['errors'], {
+            'password': 'Password must match',
+            'confirm_password': 'Password must match',
+        })
+        self.assertContains(response, 'Password must match', count=2)
+        
+    def test_register_with_correct_inputs(self):
+        response = self.client.post(reverse('core:register'), {
+            'username': 'testuser',
+            'email': 'testuser@gmail.com',
+            'password': 'pass123',
+            'confirm-password': 'pass123',
+        })
+        self.assertEqual(response.status_code, 302)
+        
+        # checks if user is created
+        user = User.objects.filter(username='testuser').first()
+        self.assertNotEqual(user, None)
+        
+        # after redirection
+        redirect_response = self.client.get(reverse('core:front_page'))
+        self.assertContains(redirect_response, 'You are now successfully registered')
+        
+        
+class LoginViewTest(TestCase):
+    def test_login_with_empty_inputs(self):
+        response = self.client.post(reverse('core:login'), {
+            'username': '',
+            'password': '',
+        })
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['errors'], {
+            'username': 'Username is required',
+            'password': 'Password is required',
+        })
+        self.assertContains(response, 'Username is required')
+        self.assertContains(response, 'Password is required')
+        
+    def test_login_with_unregistered_user(self):
+        response = self.client.post(reverse('core:login'), {
+            'username': 'unregistereduser',
+            'password': 'unregisteredpass',
+        })
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Your username and password didn't match. Please try again.", html=True)
+        
+    def test_login_with_registered_user(self):
+        # register user
+        User.objects.create_user(username='testuser', password='testuserpass')
+        
+        response = self.client.post(reverse('core:login'), {
+            'username': 'testuser',
+            'password': 'testuserpass',
+        })
+        self.assertEqual(response.status_code, 302)
+        
+        redirect_response = self.client.get(reverse('core:front_page'))
+        self.assertContains(redirect_response, text='Logout', html=True)
+        
