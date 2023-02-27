@@ -22,8 +22,8 @@ class FrontPageViewTests(TestCase):
     def test_front_page_with_draft_blogs(self):
         user = create_user(username='johndoe', password='johndoepass')
     
-        for _ in range(3):
-            create_blog(user)
+        for count in range(3):
+            create_blog(user, title=f'Test Title {count}', body=f'Test Body {count}')
             
         response = self.client.get(reverse('core:front_page'))
         
@@ -38,7 +38,7 @@ class FrontPageViewTests(TestCase):
         blogs = []
         
         for count in range(3):
-            blog = create_blog(user, Blog.ACTIVE, f'Blog Title {count}', f'This is blog body {count}')
+            blog = create_blog(user, title=f'Blog Title {count}', body=f'This is blog body {count}', status=Blog.ACTIVE)
             blogs.append(blog)
             
         response = self.client.get(reverse('core:front_page'))
