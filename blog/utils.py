@@ -28,3 +28,6 @@ def slugify(chars):
     slug = re.sub(r'\s', '-', alphanumeric)
     
     return slug
+
+def title_as_slug(title):
+    return slugify(title)[:20] + generate_slug(20)

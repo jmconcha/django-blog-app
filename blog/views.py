@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from .models import Blog
 from .forms import BlogForm, CommentForm
-from .utils import generate_slug, slugify
+from .utils import title_as_slug
 
 # Create your views here.
 def blog_detail(request, slug):
@@ -33,7 +33,7 @@ def create_blog(request):
         form = BlogForm(request.POST)
         if form.is_valid():
             blog = form.save(commit=False)
-            title_random_slug = slugify(blog.title)[:20] + generate_slug(20)
+            title_random_slug = title_as_slug(blog.title)
             blog.slug = title_random_slug
             blog.author = request.user
             blog.save()
@@ -68,14 +68,20 @@ def comment_on_blog(request, blog_slug):
     
 def search_blog(request):
     query = request.GET.get('query', '')
-    blogs = Blog.objects.filter(Q(title__icontains=query) | Q(body__icontains=query))
-    
-    if blogs.count() == 0:
-        messages.add_message(request, messages.INFO, "There's no blog that match your query")
-        return redirect(reverse('core:front_page'))
-    
-    recent_to_oldest_blogs = blogs.order_by('-created_at')
+    result = None
+
+    active_blogs = Blog.objects.filter(status=Blog.ACTIVE)
+    if active_blogs.count() > 0:
+        blogs_match = active_blogs.filter(Q(title__icontains=query) | Q(body__icontains=query))
+        if blogs_match.count() == 0:
+            messages.add_message(request, messages.INFO, "There's no blog that match your query")
+            # display recent blogs instead
+            result = active_blogs
+        else:
+            result = blogs_match
+            
+    result = result.order_by('-created_at')[:10] if result else []
     return render(request, 'core/front_page.html', {
-        'blogs': recent_to_oldest_blogs,
+        'blogs': result,
     })
     

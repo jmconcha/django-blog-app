@@ -31,25 +31,25 @@
           </form>
         </div>
         {% url 'core:front_page' as font_page_url %}
-        <a href="{{ font_page_url }}" class="navbar-item {% if request.get_full_path == font_page_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+        <a href="{{ font_page_url }}" class="navbar-item {% if request.path == font_page_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
           Home
         </a>
         {% url 'blog:create_blog' as create_blog_url %}
-        <a href="{{ create_blog_url }}" class="navbar-item {% if request.get_full_path == create_blog_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+        <a href="{{ create_blog_url }}" class="navbar-item {% if request.path == create_blog_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
           Create Blog
         </a>
         {% if request.user.is_authenticated %}
           {% url 'core:logout' as logout_url %}
-          <a href="{{ logout_url }}" class="navbar-item {% if request.get_full_path == login_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+          <a href="{{ logout_url }}" class="navbar-item {% if request.path == login_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
             Logout
           </a>
         {% else %}
           {% url 'core:login' as login_url %}
-          <a href="{{ login_url }}" class="navbar-item {% if request.get_full_path == login_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+          <a href="{{ login_url }}" class="navbar-item {% if request.path == login_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
             Login
           </a>
           {% url 'core:register' as register_url %}
-          <a href="{{ register_url }}" class="navbar-item {% if request.get_full_path == register_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+          <a href="{{ register_url }}" class="navbar-item {% if request.path == register_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
             Sign up
           </a>
         {% endif %}

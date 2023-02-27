@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from blog.models import Blog
+from .utils import check_is_empty
 
 # Create your views here.
 
@@ -15,13 +16,23 @@ def front_page(request):
     })
     
 def login_user(request):
+    errors = {}
+    
     if request.method == 'POST':
         next = request.POST.get('next')
         username = request.POST['username']
         password = request.POST['password']
+        
+        # validate fields
+        required_fields = {
+            'username': username,
+            'password': password,
+        }
+        errors = check_is_empty(required_fields)
+        
         user = authenticate(request, username=username, password=password)
         
-        if user:
+        if user is not None:
             login(request, user)
             next_url = next if next else reverse('core:front_page')
             return redirect(next_url)
@@ -32,6 +43,7 @@ def login_user(request):
         
     return render(request, 'core/login.html', {
         'next': next,
+        'errors': errors,
     })
 
 def logout_user(request):
@@ -49,6 +61,14 @@ def register_user(request):
         password = request.POST['password']
         confirm_password = request.POST['confirm-password']
         
+        required_fields = {
+            'username': username,
+            'password': password,
+            'confirm_password': confirm_password,
+        }
+        
+        errors = check_is_empty(required_fields)
+        
         # checks if username is available
         try:
             User.objects.get(username=username)
@@ -59,10 +79,12 @@ def register_user(request):
         # validate input
         if password != confirm_password:
             errors['password'] = 'Password must match'
+            errors['confirm_password'] = 'Password must match'
         
         if not errors:
             user = User.objects.create_user(username, email, password)
             login(request, user)
+            messages.add_message(request, messages.SUCCESS, 'You are now successfully registered')
             
             return redirect(reverse('core:front_page'))
             

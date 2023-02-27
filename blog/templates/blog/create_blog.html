@@ -10,10 +10,10 @@
         <div class="field mt-5">
           <label class="label" for="{{ field.auto_id }}">{{ field.label }}</label>
           <div class="{% if field.name == 'status' %}select{% else %}control{% endif %}">{{ field }}</div>
+          {% if field.errors %}
+            <div class="help is-danger">{{ field.errors }}</div>
+          {% endif %}
         </div>
-        {% if field.errors %}
-          <div class="help is-danger">{{ field.errors }}</div>
-        {% endif %}
       {% endfor %}
       <input class="button is-link" type="submit" value="Create Blog">
     </form>

@@ -1,8 +1,6 @@
 from django.test import TestCase
 
-from .utils import remove_non_alphanumeric
-
-# Create your tests here.
+from blog.utils import remove_non_alphanumeric
 
 class UtilsTests(TestCase):
     def test_remove_non_alphanumeric(self):

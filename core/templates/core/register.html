@@ -56,12 +56,12 @@
                 <div class="field mb-5">
                   <label class="label" for="confirm-password">Confirm Password</label>
                   <div class="control has-icons-left">
-                    <input class="input {% if errors.password %}is-danger{% endif %}" type="password" name="confirm-password" id="confirm-password" required>
+                    <input class="input {% if errors.confirm_password %}is-danger{% endif %}" type="password" name="confirm-password" id="confirm-password" required>
                     <span class="icon is-small is-left">
                       <i class="fas fa-lock"></i>
                     </span>
                   </div>
-                  <p class="help is-danger">{{ errors.password }}</p>
+                  <p class="help is-danger">{{ errors.confirm_password }}</p>
                 </div>
 
                 <input class="button is-fullwidth is-responsive is-link has-text-weight-bold" type="submit" value="Sign up">
