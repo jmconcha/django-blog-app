@@ -122,3 +122,28 @@ class SearchBlogViewTests(TestCase):
         self.assertContains(response, 'Test Title 1')
         self.assertContains(response, 'Test Body 1')
         self.assertContains(response, 'Test Title 2')
+        
+    def test_search_with_active_blogs_but_no_match(self):
+        user = create_user(username='johndoe', password='johndoepass')
+        active_blogs = []
+        for count in range(3):
+            blog = create_blog(user, title=f'Test Title {count}', body=f'Test Body {count}', status=Blog.ACTIVE)
+            active_blogs.append(blog)
+        
+        response = self.client.get(reverse('blog:search_blog'), {
+            'query': 'No Title Match',
+        })
+        # sort blogs, desc by created_at
+        active_blogs = sorted(active_blogs, key=lambda x: x.created_at, reverse=True)
+        
+        # get recent blogs if no match found
+        self.assertQuerysetEqual(response.context['blogs'], active_blogs)
+        # then display message
+        self.assertContains(response, "There's no blog that match your query", html=True)
+        # checks if active blogs are displayed
+        self.assertContains(response, 'Test Title 0')
+        self.assertContains(response, 'Test Body 0')
+        self.assertContains(response, 'Test Body 2')
+        self.assertContains(response, 'Test Title 1')
+        self.assertContains(response, 'Test Body 1')
+        self.assertContains(response, 'Test Title 2')

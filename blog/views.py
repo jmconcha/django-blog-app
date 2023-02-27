@@ -71,16 +71,16 @@ def search_blog(request):
     result = None
 
     active_blogs = Blog.objects.filter(status=Blog.ACTIVE)
-    if active_blogs.count() == 0:
-        result = []
-    else:
+    if active_blogs.count() > 0:
         blogs_match = active_blogs.filter(Q(title__icontains=query) | Q(body__icontains=query))
         if blogs_match.count() == 0:
             messages.add_message(request, messages.INFO, "There's no blog that match your query")
-            result = []
+            # display recent blogs instead
+            result = active_blogs
         else:
-            result = blogs_match.order_by('-created_at')
+            result = blogs_match
             
+    result = result.order_by('-created_at')[:10] if result else []
     return render(request, 'core/front_page.html', {
         'blogs': result,
     })
