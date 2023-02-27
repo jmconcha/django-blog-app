@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from core.tests.utils import create_user
 from blog.models import Blog
+from core.tests.utils import create_user
+from blog.tests.utils import create_blog
 
 # Create your tests here.
         
@@ -57,3 +58,67 @@ class CreateBlogViewTests(TestCase):
         self.assertTemplateUsed('core/front_page')
         self.assertContains(redirect_response, 'Test Title')
         self.assertContains(redirect_response, 'Test Body')
+        
+        
+class SearchBlogViewTests(TestCase):
+    def test_search_with_no_blogs(self):
+        response = self.client.get(reverse('blog:search_blog'), {
+            'query': 'Test Title',
+        })
+        
+        self.assertContains(response, 'No blog posted yet. Be the first blogger,')
+    
+    def test_search_with_empty_query(self):
+        response = self.client.get(reverse('blog:search_blog'), {
+            'query': '',
+        })
+        
+        self.assertContains(response, 'No blog posted yet. Be the first blogger,')
+        
+    def test_search_with_blogs_and_empty_query(self):
+        user = create_user(username='johndoe', password='johndoepass')
+        blogs = []
+        for count in range(3):
+            blog = create_blog(user, title=f'Test Title {count}', body=f'Test Body {count}', status=Blog.ACTIVE)
+            blogs.append(blog)
+        # sort blogs, desc by created_at
+        blogs = sorted(blogs, key=lambda x: x.created_at, reverse=True)
+        
+        response = self.client.get(reverse('blog:search_blog'), {
+            'query': '',
+        })
+        
+        self.assertQuerysetEqual(response.context['blogs'], blogs)
+        
+    def test_search_with_draft_blogs(self):
+        user = create_user(username='johndoe', password='johndoepass')
+        for count in range(3):
+            create_blog(user, title=f'Test Title {count}', body=f'Test Body {count}', status=Blog.DRAFT)
+        
+        response = self.client.get(reverse('blog:search_blog'), {
+            'query': 'Test Title',
+        })
+        
+        self.assertQuerysetEqual(response.context['blogs'], [])
+        
+    def test_search_with_active_blogs(self):
+        user = create_user(username='johndoe', password='johndoepass')
+        active_blogs = []
+        for count in range(3):
+            blog = create_blog(user, title=f'Test Title {count}', body=f'Test Body {count}', status=Blog.ACTIVE)
+            active_blogs.append(blog)
+        
+        response = self.client.get(reverse('blog:search_blog'), {
+            'query': 'Test Title',
+        })
+        # sort blogs, desc by created_at
+        active_blogs = sorted(active_blogs, key=lambda x: x.created_at, reverse=True)
+        
+        self.assertQuerysetEqual(response.context['blogs'], active_blogs)
+        # checks if active blogs are displayed
+        self.assertContains(response, 'Test Title 0')
+        self.assertContains(response, 'Test Body 0')
+        self.assertContains(response, 'Test Body 2')
+        self.assertContains(response, 'Test Title 1')
+        self.assertContains(response, 'Test Body 1')
+        self.assertContains(response, 'Test Title 2')

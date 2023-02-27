@@ -68,14 +68,20 @@ def comment_on_blog(request, blog_slug):
     
 def search_blog(request):
     query = request.GET.get('query', '')
-    blogs = Blog.objects.filter(Q(title__icontains=query) | Q(body__icontains=query))
-    
-    if blogs.count() == 0:
-        messages.add_message(request, messages.INFO, "There's no blog that match your query")
-        return redirect(reverse('core:front_page'))
-    
-    recent_to_oldest_blogs = blogs.order_by('-created_at')
+    result = None
+
+    active_blogs = Blog.objects.filter(status=Blog.ACTIVE)
+    if active_blogs.count() == 0:
+        result = []
+    else:
+        blogs_match = active_blogs.filter(Q(title__icontains=query) | Q(body__icontains=query))
+        if blogs_match.count() == 0:
+            messages.add_message(request, messages.INFO, "There's no blog that match your query")
+            result = []
+        else:
+            result = blogs_match.order_by('-created_at')
+            
     return render(request, 'core/front_page.html', {
-        'blogs': recent_to_oldest_blogs,
+        'blogs': result,
     })
     
