@@ -3,16 +3,11 @@ from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
 from blog.models import Blog
-from blog.utils import title_as_slug
-from . import views
+from .utils import create_user
+from blog.tests.utils import create_blog
 
 # Create your tests here.
 
-def create_user(username='johndoe', password='johndoe', email='johndoe@gmail.com', first_name='john', last_name='doe'):
-    return User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-
-def create_blog(user, status=Blog.DRAFT, title=f'Blog Title', body=f'This is the blog body.'):
-    return Blog.objects.create(author=user, slug=title_as_slug(title), status=status, title=title, body=body)
 
 class FrontPageViewTests(TestCase):
     def test_front_page_with_no_blogs(self):
@@ -25,7 +20,7 @@ class FrontPageViewTests(TestCase):
         self.assertContains(response, 'create blog now!')
         
     def test_front_page_with_draft_blogs(self):
-        user = create_user()
+        user = create_user(username='johndoe', password='johndoepass')
     
         for _ in range(3):
             create_blog(user)
@@ -39,7 +34,7 @@ class FrontPageViewTests(TestCase):
         self.assertContains(response, 'create blog now!')
         
     def test_front_page_with_active_blogs(self):
-        user = create_user()
+        user = create_user(username='johndoe', password='johndoepass')
         blogs = []
         
         for count in range(3):
