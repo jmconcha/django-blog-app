@@ -70,5 +70,7 @@ class UserBlogsViewWithAuthorTests(TestCase):
         self.assertQuerysetEqual(response.context['blogs'], [active_blog, draft_blog])
         self.assertContains(response, 'This is Draft Blog')
         self.assertContains(response, 'Draft Blog Body')
+        # DRAFT identifier
+        self.assertContains(response, 'DRAFT')
         self.assertContains(response, 'This is Active Blog')
         self.assertContains(response, 'Active Blog Body')
