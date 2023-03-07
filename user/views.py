@@ -22,4 +22,8 @@ def user_blogs(request, username):
             'blogs': displayable_blogs,
             'author': author,
             'is_visitor_author': is_visitor_author,
+            'BLOG_STATUS': {
+              'DRAFT': Blog.DRAFT,
+              'ACTIVE': Blog.ACTIVE,
+            },
         })
