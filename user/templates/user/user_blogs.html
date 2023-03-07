@@ -72,16 +72,4 @@
       {% endif %}
     {% endfor %}
   </div>
-
-  <script>
-    window.addEventListener('load', function() {
-      const message = document.querySelector('.async-remove-message');
-
-      if (message !== null) {
-        setTimeout(function() {
-          message.style.display = 'none';
-        }, 3000);
-      }
-    })
-  </script>
 {% endblock content %}
