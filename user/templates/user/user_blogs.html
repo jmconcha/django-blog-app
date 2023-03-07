@@ -42,14 +42,12 @@
                   {% else %}
                     <h2 class="subtitle is-5">{{ blog.created_at | date:"F d, Y" }}</h2>
                   {% endif %}
-                  <h2 class="subtitle is-5 mb-0 my-1">
-                    <a class="has-text-info" href="{% url 'user:user_blogs' blog.author.username %}">
-                      {% if blog.author.first_name or blog.author.last_name %}
-                        @{{ blog.author.first_name }}{{ blog.author.last_name }}
-                      {% else %}
-                        @{{ blog.author.username }}
-                      {% endif %}
-                    </a>
+                  <h2 class="subtitle is-5 mb-0 my-1 has-text-link">
+                    {% if blog.author.first_name or blog.author.last_name %}
+                      @{{ blog.author.first_name }}{{ blog.author.last_name }}
+                    {% else %}
+                      @{{ blog.author.username }}
+                    {% endif %}
                   </h2>
                   <h2 class="subtitle is-6 my-0">
                     *Software Developer, *Basketball Player
