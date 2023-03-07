@@ -39,8 +39,11 @@
           Create Blog
         </a>
         {% if request.user.is_authenticated %}
-          {% url 'core:logout' as logout_url %}
-          <a href="{{ logout_url }}" class="navbar-item {% if request.path == login_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+          {% url 'user:user_profile' request.user.username as user_profile_url %}
+          <a href="{{ user_profile_url }}" class="navbar-item {% if request.path == user_profile_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+            Profile
+          </a>
+          <a href="{% url 'core:logout' %}" class="navbar-item is-size-5 has-text-weight-semibold">
             Logout
           </a>
         {% else %}
