@@ -1,0 +1,84 @@
+{% extends 'core/base_generic.html' %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+  <div class="container">
+    {% if messages %}
+      <section class="section async-remove-message">
+        {% for message in messages %}
+          <article class="message is-{% if message.tags %}{{ message.tags }}{% endif %} ">
+            <div class="message-body">
+              <p>{{ message }}</p>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+    {% endif %}
+
+    {% for blog in blogs %}
+      <section class="section">
+        <div class="columns">
+          <div class="column is-8 is-offset-2">
+            <div class="content is-medium">
+              <div class="columns">
+                <div class="column">
+                  <figure class="image is-128x128 mx-0">
+                    <img
+                      class="is-rounded"
+                      src="https://bulma.io/images/placeholders/128x128.png"
+                    />
+                  </figure>
+                </div>
+                <div
+                  class="column is-full is-flex is-flex-direction-column is-justify-content-center"
+                >
+                  <h1 class="title">
+                    <a href="{% url 'blog:blog_detail' blog.slug %}">{{ blog.title }}</a>
+                  </h1>
+                  <h2 class="subtitle is-5">{{ blog.created_at | date:"F d, Y" }}</h2>
+                  <h2 class="subtitle is-5 mb-0 my-1">
+                    <a class="has-text-info" href="{% url 'user:user_blogs' blog.author.username %}">
+                      {% if blog.author.first_name or blog.author.last_name %}
+                        @{{ blog.author.first_name }}{{ blog.author.last_name }}
+                      {% else %}
+                        @{{ blog.author.username }}
+                      {% endif %}
+                    </a>
+                  </h2>
+                  <h2 class="subtitle is-6 my-0">
+                    *Software Developer, *Basketball Player
+                  </h2>
+                </div>
+              </div>
+
+              <p>{{ blog.body }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="is-divider"></div>
+    {% empty %}
+      {% if is_visitor_author %}
+        <h1 class="title">
+          You have no blog yet. Create your first blog <a href="{% url 'blog:create_blog' %}">here</a>
+        </h1>
+      {% else %}
+        <h1 class="title">No active blogs for {{ author.username }}</h1>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      const message = document.querySelector('.async-remove-message');
+
+      if (message !== null) {
+        setTimeout(function() {
+          message.style.display = 'none';
+        }, 3000);
+      }
+    })
+  </script>
+{% endblock content %}
