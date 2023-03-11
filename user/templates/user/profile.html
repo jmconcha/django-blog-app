@@ -108,7 +108,9 @@
         color: 'link',
         showHeader: false,
         showFooter: false,
-        startDate: new Date({{ user_info.birth_date.year }}, {{ user_info.birth_date.month }} - 1, {{ user_info.birth_date.day }}),
+        {% if user_info.birth_date %}
+          startDate: new Date({{ user_info.birth_date.year }}, {{ user_info.birth_date.month }} - 1, {{ user_info.birth_date.day }}),
+        {% endif %}
       };
     
       const calendars = bulmaCalendar.attach('[type="date"]', options);

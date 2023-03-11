@@ -42,19 +42,25 @@ def user_profile(request, username):
     
     if request.method == 'POST':
         user = request.user
+        user_profile = request.user.rel_profile
+        
         user.first_name = request.POST['first_name']
         user.last_name = request.POST['last_name']
         user.save()
         
         # format date before store
+        # set birth_date to None if date field is empty
         date_string = request.POST['birth_date']
-        date_format = '%m/%d/%Y'
-        temp_datetime = datetime.strptime(date_string, date_format)
-        timezone_datetime = timezone.datetime(temp_datetime.year, temp_datetime.month, temp_datetime.day)
-        timezone_date = timezone_datetime.date()
+        if date_string:
+            date_format = '%m/%d/%Y'
+            temp_datetime = datetime.strptime(date_string, date_format)
+            timezone_datetime = timezone.datetime(temp_datetime.year, temp_datetime.month, temp_datetime.day)
+            timezone_date = timezone_datetime.date()
+            user_profile.birth_date = timezone_date
+        else:
+            user_profile.birth_date = None
         
-        user_profile = request.user.rel_profile
-        user_profile.birth_date = timezone_date
+        
         user_profile.bio = request.POST['bio']
         user_profile.location = request.POST['location']
         user_profile.save()
