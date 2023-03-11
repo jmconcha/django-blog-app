@@ -39,7 +39,7 @@
           Create Blog
         </a>
         {% if request.user.is_authenticated %}
-          {% url 'user:user_profile' request.user.username as user_profile_url %}
+          {% url 'user:profile' request.user.username as user_profile_url %}
           <a href="{{ user_profile_url }}" class="navbar-item {% if request.path == user_profile_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
             Profile
           </a>

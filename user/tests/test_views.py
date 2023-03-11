@@ -121,7 +121,7 @@ class UserProfileViewTests(TestCase):
         self.client.logout()
 
         response = self.client.get(
-            reverse('user:user_profile', args=('jane',)))
+            reverse('user:profile', args=('jane',)))
         self.assertEqual(response.status_code, 302)
 
         redirect_response = self.client.get(response.url)
@@ -130,7 +130,7 @@ class UserProfileViewTests(TestCase):
     def test_profile_with_unauthorized_user(self):
         # jane is logged in user who visits john profile
         response = self.client.get(
-            reverse('user:user_profile', args=('john',)))
+            reverse('user:profile', args=('john',)))
 
         self.assertContains(response, '403 Forbidden', status_code=403)
 
@@ -147,7 +147,7 @@ class UserProfileViewTests(TestCase):
         }
 
         response = self.client.get(
-            reverse('user:user_profile', args=('jane',)))
+            reverse('user:profile', args=('jane',)))
 
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.context['user_info'], user_info)
@@ -170,7 +170,7 @@ class UserProfileViewTests(TestCase):
         }
 
         response = self.client.post(
-            reverse('user:user_profile', args=('jane',)), data)
+            reverse('user:profile', args=('jane',)), data)
         self.assertEqual(response.status_code, 302)
 
         # checks if user profile in database has been updated
@@ -215,7 +215,7 @@ class UserProfileViewTests(TestCase):
         }
 
         response = self.client.post(
-            reverse('user:user_profile', args=('jane',)), data)
+            reverse('user:profile', args=('jane',)), data)
         self.assertEqual(response.status_code, 302)
 
         redirect_response = self.client.get(response.url)
@@ -233,10 +233,10 @@ class UserProfileViewTests(TestCase):
         }
 
         response = self.client.post(
-            reverse('user:user_profile', args=('jane',)), data)
+            reverse('user:profile', args=('jane',)), data)
         redirect_response = self.client.get(response.url)
 
         self.assertContains(redirect_response,
                             'You successfully updated your profile.')
         self.assertRedirects(response, reverse(
-            'user:user_profile', args=('jane', )), 302, 200)
+            'user:profile', args=('jane', )), 302, 200)

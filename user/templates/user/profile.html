@@ -18,7 +18,7 @@
         <div class="column is-8 is-offset-2">
           <div class="card">
             <div class="card-content">
-              <form action="{% url 'user:user_profile' user_info.username %}" method="POST">
+              <form action="{% url 'user:profile' user_info.username %}" method="POST">
                 {% csrf_token %}
                 <div class="field mb-5">
                   <label class="label" for="first_name">First Name</label>
