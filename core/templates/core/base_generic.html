@@ -18,7 +18,6 @@
     <script src="https://unpkg.com/bulma-calendar/dist/js/bulma-calendar.min.js"></script>
     
     <link rel="stylesheet" href="{% static 'core/css/bulma-divider.css' %}" />
-    {% block headcontent %}{% endblock headcontent %}
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
       body {
@@ -27,9 +26,14 @@
       nav.navbar {
         height: 6rem !important;
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
-          0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+        0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
       }
     </style>
+
+    {% block headcontent %}{% endblock headcontent %}
+    {% block head_styles %}{% endblock head_styles %}
+    {% block head_scripts %}{% endblock head_scripts %}
+    
   </head>
 
   <body>
@@ -67,6 +71,8 @@
       </div>
     </footer>
 
+    {% block body_styles %}{% endblock body_styles %}
+
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         // Get all "navbar-burger" elements
@@ -101,5 +107,7 @@
         }
       });
     </script>
+
+    {% block body_scripts %}{% endblock body_scripts %}
   </body>
 </html>
