@@ -117,7 +117,7 @@ class UserProfileViewTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
         redirect_response = self.client.get(response.url)
-        self.assertContains(redirect_response, 'You need to login')
+        self.assertContains(redirect_response, 'Please login to proceed.')
 
     def test_profile_with_unauthorized_user(self):
         # jane is logged in user who visits john profile
