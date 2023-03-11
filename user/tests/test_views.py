@@ -35,7 +35,7 @@ class UserBlogsViewWithVisitorTests(TestCase):
 
         # checks author with no blogs
         self.assertQuerysetEqual(response.context['blogs'], [])
-        self.assertContains(response, f'No active blogs for johndoe')
+        self.assertContains(response, 'No active blogs for johndoe')
 
     def test_user_blogs_with_draft_blogs(self):
         for count in range(3):
@@ -45,7 +45,7 @@ class UserBlogsViewWithVisitorTests(TestCase):
         response = self.client.get(
             reverse('user:user_blogs', args=('johndoe',)))
         self.assertQuerysetEqual(response.context['blogs'], [])
-        self.assertContains(response, f'No active blogs for johndoe')
+        self.assertContains(response, 'No active blogs for johndoe')
 
     def test_user_with_active_blogs(self):
         active_blogs = []
@@ -59,7 +59,7 @@ class UserBlogsViewWithVisitorTests(TestCase):
         response = self.client.get(
             reverse('user:user_blogs', args=('johndoe',)))
         self.assertQuerysetEqual(response.context['blogs'], active_blogs)
-        self.assertNotContains(response, f'No active blogs for johndoe')
+        self.assertNotContains(response, 'No active blogs for johndoe')
 
 
 class UserBlogsViewWithAuthorTests(TestCase):
@@ -100,7 +100,7 @@ class UserProfileViewTests(TestCase):
     # *TODO DONE: populate profile form field with user profile
     # *TODO DONE: test update profile with data
     # *TODO DONE: test update profile without data
-    # *TODO: after successful profile update redirect user to profile page
+    # *TODO DONE: after successful profile update redirect user to profile page
     # *TODO: display message "You successfully updated your profile." after success profile update
 
     def setUp(self):
@@ -234,6 +234,9 @@ class UserProfileViewTests(TestCase):
 
         response = self.client.post(
             reverse('user:user_profile', args=('jane',)), data)
+        redirect_response = self.client.get(response.url)
 
+        self.assertContains(redirect_response,
+                            'You successfully updated your profile.')
         self.assertRedirects(response, reverse(
             'user:user_profile', args=('jane', )), 302, 200)

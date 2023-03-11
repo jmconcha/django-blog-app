@@ -7,7 +7,7 @@
     <section class="section">
       {% if messages %}
         {% for message in messages %}
-          <article class="message is-{% if message.tags %}{{ message.tags }}{% endif %}">
+          <article class="async-remove-message message is-{% if message.tags %}{{ message.tags }}{% endif %}">
             <div class="message-body">
                 <p>{{ message }}</p>
               </div>

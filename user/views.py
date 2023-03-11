@@ -12,6 +12,8 @@ from blog.models import Blog
 from .models import UserProfile
 
 # Create your views here.
+
+
 def user_blogs(request, username):
     author = User.objects.filter(username=username).first()
     if author == None:
@@ -24,47 +26,51 @@ def user_blogs(request, username):
         if not is_visitor_author:
             displayable_blogs = author_blogs.filter(status=Blog.ACTIVE)
         displayable_blogs = displayable_blogs.order_by('-created_at')[:10]
-        
+
         return render(request, 'user/user_blogs.html', {
             'blogs': displayable_blogs,
             'author': author,
             'is_visitor_author': is_visitor_author,
             'BLOG_STATUS': {
-              'DRAFT': Blog.DRAFT,
-              'ACTIVE': Blog.ACTIVE,
+                'DRAFT': Blog.DRAFT,
+                'ACTIVE': Blog.ACTIVE,
             },
         })
+
 
 @login_required(login_url=reverse_lazy('core:login'))
 def user_profile(request, username):
     if request.user.username != username:
         raise PermissionDenied
-    
+
     if request.method == 'POST':
         user = request.user
         user_profile = request.user.rel_profile
-        
+
         user.first_name = request.POST['first_name']
         user.last_name = request.POST['last_name']
         user.save()
-        
+
         # format date before store
         # set birth_date to None if date field is empty
         date_string = request.POST['birth_date']
         if date_string:
             date_format = '%m/%d/%Y'
             temp_datetime = datetime.strptime(date_string, date_format)
-            timezone_datetime = timezone.datetime(temp_datetime.year, temp_datetime.month, temp_datetime.day)
+            timezone_datetime = timezone.datetime(
+                temp_datetime.year, temp_datetime.month, temp_datetime.day)
             timezone_date = timezone_datetime.date()
             user_profile.birth_date = timezone_date
         else:
             user_profile.birth_date = None
-        
-        
+
         user_profile.bio = request.POST['bio']
         user_profile.location = request.POST['location']
         user_profile.save()
-    
+
+        messages.add_message(request, messages.SUCCESS,
+                             'You successfully updated your profile.')
+
         return HttpResponseRedirect(reverse('user:user_profile', args=(request.user.username,)))
     else:
         user_profile = request.user.rel_profile
@@ -78,7 +84,7 @@ def user_profile(request, username):
             'location': user_profile.location,
             'birth_date': user_profile.birth_date,
         }
-        
+
         return render(request, 'user/profile.html', {
             'user_info': user_info,
         })
