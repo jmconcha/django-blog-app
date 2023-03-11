@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
+from django.utils import timezone
+from datetime import datetime
 
 from blog.models import Blog
 from .models import UserProfile
@@ -37,22 +40,39 @@ def user_profile(request, username):
     if request.user.username != username:
         raise PermissionDenied
     
-    user_profile = request.user.rel_profile
-    user_info = {
-        'username': request.user.username,
-        'firstname': request.user.first_name,
-        'lastname': request.user.last_name,
-        'email': request.user.email,
-        'bio': user_profile.bio,
-        'location': user_profile.location,
-        'birth_date': user_profile.birth_date,
-    }
-    
-    print(user_info)
-    
     if request.method == 'POST':
-        pass
+        user = request.user
+        user.first_name = request.POST['first_name']
+        user.last_name = request.POST['last_name']
+        user.save()
+        
+        # format date before store
+        date_string = request.POST['birth_date']
+        date_format = '%m/%d/%Y'
+        temp_datetime = datetime.strptime(date_string, date_format)
+        timezone_datetime = timezone.datetime(temp_datetime.year, temp_datetime.month, temp_datetime.day)
+        timezone_date = timezone_datetime.date()
+        
+        user_profile = request.user.rel_profile
+        user_profile.birth_date = timezone_date
+        user_profile.bio = request.POST['bio']
+        user_profile.location = request.POST['location']
+        user_profile.save()
+    
+        return HttpResponseRedirect(reverse('user:user_profile', args=(request.user.username,)))
     else:
+        user_profile = request.user.rel_profile
+        user_info = {
+            'username': request.user.username,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            # commented because planning to move this edit email to account view
+            # 'email': request.user.email,
+            'bio': user_profile.bio,
+            'location': user_profile.location,
+            'birth_date': user_profile.birth_date,
+        }
+        
         return render(request, 'user/profile.html', {
             'user_info': user_info,
         })

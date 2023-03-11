@@ -21,27 +21,28 @@
               <form action="{% url 'user:user_profile' user_info.username %}" method="POST">
                 {% csrf_token %}
                 <div class="field mb-5">
-                  <label class="label" for="firstname">First Name</label>
+                  <label class="label" for="first_name">First Name</label>
                   <div class="control has-icons-left">
-                    <input class="input {% if errors.firstname %}is-danger{% endif %}" type="text" name="firstname" id="firstname" value="{{ user_info.firstname }}">
+                    <input class="input {% if errors.first_name %}is-danger{% endif %}" type="text" name="first_name" id="first_name" value="{{ user_info.first_name }}">
                     <span class="icon is-small is-left">
                       <i class="fas fa-user"></i>
                     </span>
                   </div>
-                  <p class="help is-danger">{{ errors.firstname }}</p>
+                  <p class="help is-danger">{{ errors.first_name }}</p>
                 </div>
 
                 <div class="field mb-5">
-                  <label class="label" for="lastname">Last Name</label>
+                  <label class="label" for="last_name">Last Name</label>
                   <div class="control has-icons-left">
-                    <input class="input {% if errors.lastname %}is-danger{% endif %}" type="text" name="lastname" id="lastname" value="{{ user_info.lastname }}">
+                    <input class="input {% if errors.last_name %}is-danger{% endif %}" type="text" name="last_name" id="last_name" value="{{ user_info.last_name }}">
                     <span class="icon is-small is-left">
                       <i class="fas fa-user"></i>
                     </span>
                   </div>
-                  <p class="help is-danger">{{ errors.lastname }}</p>
+                  <p class="help is-danger">{{ errors.last_name }}</p>
                 </div>
 
+                {% comment %} commented because planning to move this edit email to account view
                 <div class="field mb-5">
                   <label class="label" for="email">Email</label>
                   <div class="control has-icons-left has-icons-right">
@@ -50,7 +51,7 @@
                       <i class="fas fa-envelope"></i>
                     </span>
                   </div>
-                </div>
+                </div> {% endcomment %}
 
                 <div class="field mb-5">
                   <label class="label" for="birth_date">Birthday</label>
