@@ -21,9 +21,9 @@
               <form action="{% url 'user:profile' user_info.username %}" method="POST">
                 {% csrf_token %}
                 <div class="field mb-5">
-                  <label class="label" for="first_name">First Name</label>
+                  <label class="label" for="first-name">First Name</label>
                   <div class="control has-icons-left">
-                    <input class="input {% if errors.first_name %}is-danger{% endif %}" type="text" name="first_name" id="first_name" value="{{ user_info.first_name }}">
+                    <input class="input {% if errors.first_name %}is-danger{% endif %}" type="text" name="first_name" id="first-name" value="{{ user_info.first_name }}">
                     <span class="icon is-small is-left">
                       <i class="fas fa-user"></i>
                     </span>
@@ -32,9 +32,9 @@
                 </div>
 
                 <div class="field mb-5">
-                  <label class="label" for="last_name">Last Name</label>
+                  <label class="label" for="last-name">Last Name</label>
                   <div class="control has-icons-left">
-                    <input class="input {% if errors.last_name %}is-danger{% endif %}" type="text" name="last_name" id="last_name" value="{{ user_info.last_name }}">
+                    <input class="input {% if errors.last_name %}is-danger{% endif %}" type="text" name="last_name" id="last-name" value="{{ user_info.last_name }}">
                     <span class="icon is-small is-left">
                       <i class="fas fa-user"></i>
                     </span>
