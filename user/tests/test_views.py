@@ -95,14 +95,6 @@ class UserBlogsViewWithAuthorTests(TestCase):
 
 
 class UserProfileViewTests(TestCase):
-    # *TODO DONE: require user to be logged in
-    # *TODO DONE: return PermissionDenied if logged in user is not the owner
-    # *TODO DONE: populate profile form field with user profile
-    # *TODO DONE: test update profile with data
-    # *TODO DONE: test update profile without data
-    # *TODO DONE: after successful profile update redirect user to profile page
-    # *TODO: display message "You successfully updated your profile." after success profile update
-
     def setUp(self):
         create_user(username='john', password='johnpass')
         user = create_user(username='jane', password='janepass')
@@ -240,3 +232,14 @@ class UserProfileViewTests(TestCase):
                             'You successfully updated your profile.')
         self.assertRedirects(response, reverse(
             'user:profile', args=('jane', )), 302, 200)
+
+    def test_profile_with_new_user(self):
+        self.client.logout()
+        self.client.post(reverse('core:register'), {
+            'username': 'newuser',
+            'password': 'newuserpass',
+            'confirm_password': 'newuserpass'
+        })
+        response = self.client.get(reverse('user:profile', args=('newuser',)))
+
+        self.assertEqual(response.status_code, 200)
