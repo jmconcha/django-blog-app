@@ -1,0 +1,97 @@
+{% extends 'core/base_generic.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+  <div class="container mt-6 mb-auto">
+    <section class="section">
+      {% if messages %}
+        {% for message in messages %}
+          <article class="message is-{% if message.tags %}{{ message.tags }}{% endif %}">
+            <div class="message-body">
+                <p>{{ message }}</p>
+              </div>
+          </article>
+        {% endfor %}
+      {% endif %}
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="card">
+            <div class="card-content">
+              <form action="{% url 'user:user_profile' user_info.username %}" method="POST">
+                {% csrf_token %}
+                <div class="field mb-5">
+                  <label class="label" for="firstname">First Name</label>
+                  <div class="control has-icons-left">
+                    <input class="input {% if errors.firstname %}is-danger{% endif %}" type="text" name="firstname" id="firstname" value="{{ user_info.firstname }}">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                  <p class="help is-danger">{{ errors.firstname }}</p>
+                </div>
+
+                <div class="field mb-5">
+                  <label class="label" for="lastname">Last Name</label>
+                  <div class="control has-icons-left">
+                    <input class="input {% if errors.lastname %}is-danger{% endif %}" type="text" name="lastname" id="lastname" value="{{ user_info.lastname }}">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                  <p class="help is-danger">{{ errors.lastname }}</p>
+                </div>
+
+                <div class="field mb-5">
+                  <label class="label" for="email">Email</label>
+                  <div class="control has-icons-left has-icons-right">
+                    <input class="input" id="email" name="email" type="email" placeholder="hello@email.com" value="{{ user_info.email }}" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-envelope"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="field mb-5">
+                  <label class="label" for="birth_date">Birthday</label>
+                  <div class="control has-icons-left has-icons-right">
+                    <input class="input" id="birth_date" name="birth_date" type="date" value="{{ user_info.birth_date }}">
+                  </div>
+                </div>
+
+                <div class="field mb-5">
+                  <label for="bio" class="label">Bio</label>
+                  <div class="control">
+                    <textarea class="textarea" name="bio" id="bio" rows="3">{{ user_info.bio }}</textarea>
+                  </div>
+                </div>
+
+                <div class="field mb-5">
+                  <label class="label" for="location">Location</label>
+                  <div class="control  has-icons-left">
+                    <input class="input" id="location" name="location" type="text" value="{{ user_info.location }}">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-map-marker-alt"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <input class="button is-fullwidth is-responsive is-link has-text-weight-bold" type="submit" value="Update Profile">
+                {% if next %}
+                  <input type="hidden" name="next" value={{ next }}>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .datetimepicker-clear-button {
+      display: flex;
+      align-items: center;
+    }
+  </style>
+{% endblock content %}
