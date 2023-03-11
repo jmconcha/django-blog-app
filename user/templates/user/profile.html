@@ -55,7 +55,7 @@
                 <div class="field mb-5">
                   <label class="label" for="birth_date">Birthday</label>
                   <div class="control has-icons-left has-icons-right">
-                    <input class="input" id="birth_date" name="birth_date" type="date" value="{{ user_info.birth_date }}">
+                    <input class="input" id="birth_date" name="birth_date" type="date">
                   </div>
                 </div>
 
@@ -94,4 +94,36 @@
       align-items: center;
     }
   </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize all input of date type.
+      const options = {
+        type: 'date',
+        color: 'link',
+        showHeader: false,
+        showFooter: false,
+        startDate: new Date({{ user_info.birth_date.year }}, {{ user_info.birth_date.month }} - 1, {{ user_info.birth_date.day }}),
+      };
+    
+      const calendars = bulmaCalendar.attach('[type="date"]', options);
+
+      // Loop on each calendar initialized
+      calendars.forEach(calendar => {
+        // Add listener to select event
+        calendar.on('select', date => {
+          console.log(date);
+        });
+      });
+
+      // To access to bulmaCalendar instance of an element
+      const element = document.querySelector('#my-element');
+      if (element) {
+        // bulmaCalendar instance is available as element.bulmaCalendar
+        element.bulmaCalendar.on('select', datepicker => {
+          console.log(datepicker.data.value());
+        });
+      }
+    })
+  </script>
 {% endblock content %}
