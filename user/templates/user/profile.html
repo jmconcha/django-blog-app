@@ -87,14 +87,18 @@
       </div>
     </section>
   </div>
+{% endblock content %}
 
+{% block body_styles %}
   <style>
     .datetimepicker-clear-button {
       display: flex;
       align-items: center;
     }
   </style>
+{% endblock body_styles %}
 
+{% block body_scripts %}
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Initialize all input of date type.
@@ -126,4 +130,4 @@
       }
     })
   </script>
-{% endblock content %}
+{% endblock body_scripts %}
