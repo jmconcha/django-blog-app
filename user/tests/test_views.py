@@ -136,6 +136,7 @@ class UserProfileViewTests(TestCase):
             'bio': user_profile.bio,
             'location': user_profile.location,
             'birth_date': user_profile.birth_date,
+            'profile_picture': '/media/thumbnails/default.png',
         }
 
         response = self.client.get(
@@ -159,6 +160,7 @@ class UserProfileViewTests(TestCase):
             'bio': 'This is Jane Update Bio',
             'location': 'Philippines Updated',
             'birth_date': timezone.datetime(1991, 1, 28).date(),
+            'profile_picture': '/media/thumbnails/default.png',
         }
 
         response = self.client.post(
@@ -204,6 +206,7 @@ class UserProfileViewTests(TestCase):
             'bio': '',
             'location': '',
             'birth_date': None,
+            'profile_picture': '/media/thumbnails/default.png',
         }
 
         response = self.client.post(
