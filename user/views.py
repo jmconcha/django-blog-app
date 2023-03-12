@@ -1,3 +1,5 @@
+import os
+import uuid
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
@@ -7,8 +9,10 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.conf import settings
 
 from blog.models import Blog
+from .utils import create_thumbnail, save_image_file
 
 # Create your views here.
 
@@ -63,6 +67,17 @@ def profile(request, username):
         else:
             user_profile.birth_date = None
 
+        # save profile picture
+        profile_picture = request.FILES.get('profile_picture')
+        if profile_picture is not None:
+            # save file and a thumbnail copy
+            _, image_ext = os.path.splitext(profile_picture.name)
+            image_name = f'{uuid.uuid4()}{image_ext}'
+            create_thumbnail(profile_picture, image_name)
+            save_image_file(profile_picture, image_name)
+            # then save the filename with ext
+            user_profile.picture = image_name
+
         user_profile.bio = request.POST['bio']
         user_profile.location = request.POST['location']
         user_profile.save()
@@ -82,6 +97,7 @@ def profile(request, username):
         'bio': user_profile.bio,
         'location': user_profile.location,
         'birth_date': user_profile.birth_date,
+        'profile_picture': os.path.join(settings.MEDIA_URL, 'thumbnails/', user_profile.picture),
     }
 
     return render(request, 'user/profile.html', {

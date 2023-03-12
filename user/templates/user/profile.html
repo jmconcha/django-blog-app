@@ -7,18 +7,25 @@
     <section class="section">
       {% if messages %}
         {% for message in messages %}
-          <article class="async-remove-message message is-{% if message.tags %}{{ message.tags }}{% endif %}">
+          <article class="async-remove-message mb-6 message is-{% if message.tags %}{{ message.tags }}{% endif %}">
             <div class="message-body">
                 <p>{{ message }}</p>
               </div>
           </article>
+          <div style="margin-bottom: 100px;"></div>
         {% endfor %}
       {% endif %}
       <div class="columns">
         <div class="column is-8 is-offset-2">
           <div class="card">
             <div class="card-content">
-              <form action="{% url 'user:profile' user_info.username %}" method="POST">
+              <div class="avatar-container">
+                <figure class="avatar">
+                  <img class="avatar-img" width="150" height="150" src="{{ user_info.profile_picture }}">
+                </figure>
+              </div>
+
+              <form action="{% url 'user:profile' user_info.username %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="field mb-5">
                   <label class="label" for="first-name">First Name</label>
@@ -77,6 +84,24 @@
                   </div>
                 </div>
 
+                <div class="file mb-5 has-name is-fullwidth is-flex is-flex-direction-column">
+                  <label class="label">Profile Picture</label>
+                  <label class="file-label">
+                    <input id="profile-picture" class="file-input" type="file" name="profile_picture">
+                    <span class="file-cta">
+                      <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                      <span class="file-label">
+                        Choose a file…
+                      </span>
+                    </span>
+                    <span id="file-name" class="file-name">
+                      Screen Shot 2017-07-29 at 15.54.25.png
+                    </span>
+                  </label>
+                </div>
+
                 <input class="button is-fullwidth is-responsive is-link has-text-weight-bold" type="submit" value="Update Profile">
                 {% if next %}
                   <input type="hidden" name="next" value={{ next }}>
@@ -95,6 +120,27 @@
     .datetimepicker-clear-button {
       display: flex;
       align-items: center;
+    }
+
+    .avatar-container {
+      display: flex;
+      height: 150px;
+      justify-content: center;
+      margin-top: -85px;
+      margin-bottom: 50px;
+    }
+
+    .avatar {
+      display: flex;
+      width: 150px;
+      height: 150px;
+    }
+
+    .avatar-img {
+      padding: 5px;
+      border-radius: 50%;
+      box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+      object-fit: cover;
     }
   </style>
 {% endblock body_styles %}
@@ -131,6 +177,13 @@
           console.log(datepicker.data.value());
         });
       }
+
+      // update file input label with selected file name
+      const profilePicture = document.getElementById('profile-picture')
+      const profilePictureLabel = document.getElementById('file-name')
+      profilePicture.addEventListener('change', function() {
+        profilePictureLabel.textContent = profilePicture.files[0].name;
+      })
     })
   </script>
 {% endblock body_scripts %}
