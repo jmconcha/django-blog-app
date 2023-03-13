@@ -1,3 +1,4 @@
+import urllib.parse
 from django.test import TestCase
 from django.urls import reverse
 
@@ -157,3 +158,89 @@ class SearchBlogViewTests(TestCase):
         self.assertContains(response, 'Test Title 1')
         self.assertContains(response, 'Test Body 1')
         self.assertContains(response, 'Test Title 2')
+
+
+class UpdateBlogViewTests(TestCase):
+    def setUp(self):
+        self.user = create_user(username='jane', password='janepass')
+        self.blog = create_blog(
+            user=self.user, title='Draft Blog Title', body='Draft Blog Body')
+        self.client.login(username='jane', password='janepass')
+
+    def test_update_blog_with_non_existing_blog(self):
+        get_response = self.client.get(
+            reverse('blog:update_blog', args=('non-existing-blog-slug',)))
+        self.assertEqual(get_response.status_code, 404)
+        self.assertContains(get_response,
+                            'Not Found', status_code=404)
+
+        post_response = self.client.post(
+            reverse('blog:update_blog', args=('non-existing-blog-slug',)))
+        self.assertEqual(post_response.status_code, 404)
+        self.assertContains(post_response,
+                            'Not Found', status_code=404)
+
+    def test_update_blog_with_unathenticated_user(self):
+        self.client.logout()
+
+        update_blog_url = reverse('blog:update_blog', args=(self.blog.slug,))
+        response = self.client.get(update_blog_url)
+
+        login_url = reverse('core:login')
+        next_url = urllib.parse.quote(update_blog_url, safe='')
+        redirect_url = f'{login_url}?next={next_url}'
+        self.assertRedirects(response, redirect_url, 302, 200)
+
+    def test_update_blog_with_unauthorized_user(self):
+        create_user(username='john', password='johnpass')
+        self.client.logout()
+        self.client.login(username='john', password='johnpass')
+
+        # *TODO: checks if user is receive a 403 forbidden response
+        response = self.client.get(
+            reverse('blog:update_blog', args=(self.blog.slug,)))
+
+        self.assertEqual(response.status_code, 403)
+        self.assertContains(response, '403 Forbidden', status_code=403)
+
+    def test_update_blog_without_title_and_body(self):
+        data = {
+            'status': Blog.DRAFT,
+            'title': '',
+            'body': '',
+        }
+        response = self.client.post(
+            reverse('blog:update_blog', args=(self.blog.slug,)), data)
+
+        # *TODO: checks if errors displayed on form
+        self.assertContains(response, 'This field is required.', count=2)
+
+    def test_update_blog_with_title_and_body(self):
+        data = {
+            'status': Blog.DRAFT,
+            'title': 'Draft Blog Title Updated',
+            'body': 'Draft Blog Body Updated',
+        }
+        response = self.client.post(
+            reverse('blog:update_blog', args=(self.blog.slug,)), data)
+        redirect_response = self.client.get(response.url)
+
+        # get updated blog
+        updated_blog = Blog.objects.get(pk=self.blog.id)
+
+        self.assertContains(
+            redirect_response, 'Your blog has been updated.')
+        self.assertRedirects(response, reverse(
+            'blog:blog_detail', args=(updated_blog.slug,)), 302, 200)
+        self.assertEqual(updated_blog.title, 'Draft Blog Title Updated')
+        self.assertEqual(updated_blog.body, 'Draft Blog Body Updated')
+
+    def test_update_blog_with_active_blog(self):
+        active_blog = create_blog(
+            self.user, title='Active Blog Title', body='Active Blog Title Body', status=Blog.ACTIVE)
+        # *TODO: checks if user is redirected to view/detail blog page
+        response = self.client.post(
+            reverse('blog:update_blog', args=(active_blog.slug,)))
+
+        self.assertRedirects(response, reverse(
+            'blog:blog_detail', args=(active_blog.slug,)), 302, 200)

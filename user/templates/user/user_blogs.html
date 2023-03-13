@@ -37,7 +37,9 @@
                     <a href="{% url 'blog:blog_detail' blog.slug %}">{{ blog.title }}</a>
                   </h1>
                   {% if blog.status == BLOG_STATUS.DRAFT %}
-                    <h2 class="subtitle is-6 mb-3 has-text-warning">DRAFT</h2>
+                    <h2 class="subtitle is-6 mb-3">
+                      <a class="has-text-warning" href="{% url 'blog:update_blog' blog.slug %}">DRAFT</a>
+                    </h2>
                     <h2 class="subtitle is-5 mt-0">{{ blog.created_at | date:"F d, Y" }}</h2>
                   {% else %}
                     <h2 class="subtitle is-5">{{ blog.created_at | date:"F d, Y" }}</h2>

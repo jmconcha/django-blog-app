@@ -38,6 +38,10 @@
         <a href="{{ create_blog_url }}" class="navbar-item {% if request.path == create_blog_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
           Create Blog
         </a>
+        {% url 'user:user_blogs' request.user.username as user_blogs_url %}
+        <a href="{{ user_blogs_url }}" class="navbar-item {% if request.path == user_blogs_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">
+          My Blogs
+        </a>
         {% if request.user.is_authenticated %}
           {% url 'user:profile' request.user.username as user_profile_url %}
           <a href="{{ user_profile_url }}" class="navbar-item {% if request.path == user_profile_url %}is-active has-text-link{% endif%} is-size-5 has-text-weight-semibold">

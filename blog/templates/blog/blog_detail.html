@@ -4,6 +4,18 @@
 
 {% block content %}
   <div class="container">
+    {% if messages %}
+    <section class="section async-remove-message">
+      {% for message in messages %}
+        <article class="message is-{% if message.tags %}{{ message.tags }}{% endif %} ">
+          <div class="message-body">
+            <p>{{ message }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  {% endif %}
+  
     <section class="section">
       <div class="content is-medium">
         <div class="columns">
@@ -18,7 +30,13 @@
           <div
             class="column is-full is-flex is-flex-direction-column is-justify-content-center"
           >
-            <h1 class="title">{{ blog.title }}</h1>
+            <h1 class="title has-text-link">{{ blog.title }}</h1>
+            {% if blog.status == BLOG_STATUS.DRAFT %}
+              <h2 class="subtitle is-6 mb-3">
+                <a class="has-text-warning" href="{% url 'blog:update_blog' blog.slug %}">Edit</a>
+              </h2>
+              <h2 class="subtitle is-5 mt-0">{{ blog.created_at | date:"F d, Y" }}</h2>
+            {% endif %}
             <h2 class="subtitle is-5">
               <span class="mr-4">James Harden</span>
               <span class="has-text-grey">{{ blog.created_at|date:"F d, Y" }}</span>
