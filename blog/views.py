@@ -66,6 +66,7 @@ def comment_on_blog(request, blog_slug):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.blog = blog
+            comment.user = request.user
             comment.save()
 
             return redirect(reverse('blog:blog_detail', args=(blog_slug,)))
