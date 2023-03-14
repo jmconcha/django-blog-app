@@ -30,21 +30,31 @@
           <div
             class="column is-full is-flex is-flex-direction-column is-justify-content-center"
           >
-            <h1 class="title has-text-link">{{ blog.title }}</h1>
+            <h1 class="title">
+              <a href="{% url 'blog:blog_detail' blog.slug %}">{{ blog.title }}</a>
+            </h1>
             {% if blog.status == BLOG_STATUS.DRAFT %}
               <h2 class="subtitle is-6 mb-3">
-                <a class="has-text-warning" href="{% url 'blog:update_blog' blog.slug %}">Edit</a>
+                <a class="has-text-warning" href="{% url 'blog:update_blog' blog.slug %}">DRAFT</a>
               </h2>
               <h2 class="subtitle is-5 mt-0">{{ blog.created_at | date:"F d, Y" }}</h2>
+            {% else %}
+              <h2 class="subtitle is-5">{{ blog.created_at | date:"F d, Y" }}</h2>
             {% endif %}
-            <h2 class="subtitle is-5">
-              <span class="mr-4">James Harden</span>
-              <span class="has-text-grey">{{ blog.created_at|date:"F d, Y" }}</span>
+            <h2 class="subtitle is-5 mb-0 my-1 has-text-link">
+              {% if blog.author.first_name or blog.author.last_name %}
+                @{{ blog.author.first_name }}{{ blog.author.last_name }}
+              {% else %}
+                @{{ blog.author.username }}
+              {% endif %}
+            </h2>
+            <h2 class="subtitle is-6 my-0">
+              *Software Developer, *Basketball Player
             </h2>
           </div>
         </div>
 
-        <p>{{ blog.body }}</p>
+        <p class="mt-6">{{ blog.body }}</p>
       </div>
     </section>
 
