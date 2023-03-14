@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=100, blank=True)
     birth_date = models.DateField(blank=True, null=True)
     picture = models.CharField(
-        max_length=50,  blank=True, default='default.png')
+        max_length=100,  blank=True, default='/media/thumbnails/default.png')
 
     def __str__(self):
         return self.user.username
