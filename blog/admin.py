@@ -16,6 +16,10 @@ class BlogAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('blog', 'comment_text', 'created_at')
+
+
 # Register your models here.
 admin.site.register(Blog, BlogAdmin)
-admin.site.register(Comment)
+admin.site.register(Comment, CommentAdmin)
