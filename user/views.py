@@ -75,8 +75,9 @@ def profile(request, username):
             image_name = f'{uuid.uuid4()}{image_ext}'
             create_thumbnail(profile_picture, image_name)
             save_image_file(profile_picture, image_name)
-            # then save the filename with ext
-            user_profile.picture = image_name
+            # then save the URI of the file
+            user_profile.picture = os.path.join(
+                settings.MEDIA_URL, 'thumbnails/', image_name)
 
         user_profile.bio = request.POST['bio']
         user_profile.location = request.POST['location']
@@ -97,7 +98,7 @@ def profile(request, username):
         'bio': user_profile.bio,
         'location': user_profile.location,
         'birth_date': user_profile.birth_date,
-        'profile_picture': os.path.join(settings.MEDIA_URL, 'thumbnails/', user_profile.picture),
+        'profile_picture': user_profile.picture,
     }
 
     return render(request, 'user/profile.html', {
