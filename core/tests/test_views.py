@@ -175,6 +175,17 @@ class LoginUserViewTests(TestCase):
         redirect_response = self.client.get(reverse('core:front_page'))
         self.assertContains(redirect_response, text='Logout', html=True)
 
+    def test_login_with_logged_in_user(self):
+        User.objects.create_user(username='jane', password='janepass')
+        data = {
+            'username': 'jane',
+            'password': 'janepass',
+        }
+        self.client.post(reverse('core:login'), data)
+        response = self.client.get(reverse('core:login'))
+
+        self.assertRedirects(response, reverse('core:front_page'), 302, 200)
+
 
 class LogoutUserViewTests(TestCase):
     def setUp(self):

@@ -20,6 +20,9 @@ def front_page(request):
 
 
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect(reverse('core:front_page'))
+
     errors = {}
 
     if request.method == 'POST':
