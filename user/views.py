@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from blog.models import Blog
-from .utils import create_thumbnail, save_image_file
+from .utils import create_thumbnail, save_image_file, IMAGE_FILE_TYPES
 
 # Create your views here.
 
@@ -46,6 +46,8 @@ def profile(request, username):
     if request.user.username != username:
         raise PermissionDenied
 
+    errors = {}
+
     if request.method == 'POST':
         user = request.user
         user_profile = request.user.rel_profile
@@ -70,21 +72,33 @@ def profile(request, username):
         # save profile picture
         profile_picture = request.FILES.get('profile_picture')
         if profile_picture is not None:
-            # save file and a thumbnail copy
             _, image_ext = os.path.splitext(profile_picture.name)
-            image_name = f'{uuid.uuid4()}{image_ext}'
-            create_thumbnail(profile_picture, image_name)
-            save_image_file(profile_picture, image_name)
-            # then save the URI of the file
-            user_profile.picture = os.path.join(
-                settings.MEDIA_URL, 'thumbnails/', image_name)
+
+            # validate file type
+            if (image_ext not in IMAGE_FILE_TYPES):
+                errors['profile_picture'] = 'Invalid file type. Acceptable types are ' + \
+                    ', '.join(IMAGE_FILE_TYPES)
+            elif (profile_picture.size >= 1024 * 1024 * 1):
+                errors['profile_picture'] = 'Please ensure your file is under 1MB in size.'
+            else:
+                # save file and a thumbnail copy
+                image_name = f'{uuid.uuid4()}{image_ext}'
+                create_thumbnail(profile_picture, image_name)
+                save_image_file(profile_picture, image_name)
+                # then save the URI of the file
+                user_profile.picture = os.path.join(
+                    settings.MEDIA_URL, 'thumbnails/', image_name)
 
         user_profile.bio = request.POST['bio']
         user_profile.location = request.POST['location']
         user_profile.save()
 
-        messages.add_message(request, messages.SUCCESS,
-                             'You successfully updated your profile.')
+        if (len(errors.values()) > 0):
+            messages.add_message(request, messages.ERROR,
+                                 errors['profile_picture'])
+        else:
+            messages.add_message(request, messages.SUCCESS,
+                                 'You successfully updated your profile.')
 
         return HttpResponseRedirect(reverse('user:profile', args=(request.user.username,)))
 
@@ -103,4 +117,5 @@ def profile(request, username):
 
     return render(request, 'user/profile.html', {
         'user_info': user_info,
+        'errors': errors,
     })

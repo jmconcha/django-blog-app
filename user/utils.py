@@ -3,6 +3,7 @@ from PIL import Image
 from django.conf import settings
 
 THUMBNAIL_SIZE = (200, 200)
+IMAGE_FILE_TYPES = ('.jpg', '.jpeg', '.png', '.gif')
 
 
 def create_thumbnail(image, image_name):
